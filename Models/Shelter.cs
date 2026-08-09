@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.Contracts;
 using System.Text.Json.Serialization;
 using EmergencyShelterReadinessSystemAPI.Enums;
 
@@ -7,6 +8,10 @@ namespace EmergencyShelterReadinessSystemAPI.Models
     public class Shelter
     {
         public int Id { get; set; }
+        
+        public int AreaId { get; set; }
+        
+        public Area Area { get; set; }
         [Required]
         [StringLength(200)]
         
@@ -30,6 +35,8 @@ namespace EmergencyShelterReadinessSystemAPI.Models
         [Required]
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public ShelterType ShelterType { get; set; }
+
+        public ICollection<Inspection> inspections { get; set; } = new List<Inspection>();
 
     }
 }

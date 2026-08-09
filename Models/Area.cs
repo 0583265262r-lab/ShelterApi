@@ -5,6 +5,7 @@ using System.Text.Json.Serialization;
 namespace EmergencyShelterReadinessSystemAPI.Models
 {
     [Index(nameof(AreaCode), IsUnique = true)]
+    [Index(nameof(City),nameof(Neighborhood), IsUnique = true)]
     public class Area
     {
         public int Id { get; set; }
@@ -25,7 +26,7 @@ namespace EmergencyShelterReadinessSystemAPI.Models
        
         public int RiskLevel { get; set; }
 
-
+        public ICollection<Shelter> Shelters { get; set; } = new List<Shelter>();
 
     }
 }

@@ -4,7 +4,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace EmergencyShelterReadinessSystemAPI.Data
 {
-    public class ShelterDBContext:DbContext
+    public class ShelterDBContext : DbContext
     {
         public ShelterDBContext(DbContextOptions<ShelterDBContext> options)
             : base(options)
@@ -17,3 +17,17 @@ namespace EmergencyShelterReadinessSystemAPI.Data
         public DbSet<Inspection> inspections { get; set; } = null!;
     }
 }
+      //protected override void OnModelCreating(ModelBuilder modelBuilder)
+      //  {
+      //      base.OnModelCreating(modelBuilder);
+      //      modelBuilder.Entity<Shelter>()
+      //          .HasOne(s => s.Area)
+      //          .WithMany(a => a.Shelters)
+      //          .HasForeignKey(s => s.AreaId)
+      //          .OnDelete(DeleteBehavior.Restrict);
+      //      modelBuilder.Entity<Inspection>()
+      //          .HasOne(i => i.Shelter)
+      //          .WithMany(s => s.inspections)
+      //          .HasForeignKey(i => i.ShelterId)
+      //          .OnDelete(DeleteBehavior.Restrict);
+      //  }
