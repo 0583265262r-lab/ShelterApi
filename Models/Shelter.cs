@@ -36,7 +36,7 @@ namespace EmergencyShelterReadinessSystemAPI.Models
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public ShelterType ShelterType { get; set; }
 
-        public ICollection<Inspection> inspections { get; set; } = new List<Inspection>();
+        public ICollection<Inspection> Inspections { get; set; } = new List<Inspection>();
 
     }
 }

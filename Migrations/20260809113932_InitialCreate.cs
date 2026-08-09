@@ -1,0 +1,130 @@
+﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
+
+namespace EmergencyShelterReadinessSystemAPI.Migrations
+{
+    /// <inheritdoc />
+    public partial class InitialCreate : Migration
+    {
+        /// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.AlterDatabase()
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Areas",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    City = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Neighborhood = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    AreaCode = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    RiskLevel = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Areas", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "shelters",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    AreaId = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Street = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    BuildingNumber = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Capacity = table.Column<int>(type: "int", nullable: false),
+                    IsAccessible = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsPublic = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    ShelterType = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_shelters", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_shelters_Areas_AreaId",
+                        column: x => x.AreaId,
+                        principalTable: "Areas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "inspections",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    ShelterId = table.Column<int>(type: "int", nullable: false),
+                    InspectionDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    ReadinessScore = table.Column<int>(type: "int", nullable: false),
+                    Passed = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    DefectsCount = table.Column<int>(type: "int", nullable: false),
+                    Notes = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_inspections", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_inspections_shelters_ShelterId",
+                        column: x => x.ShelterId,
+                        principalTable: "shelters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Areas_AreaCode",
+                table: "Areas",
+                column: "AreaCode",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Areas_City_Neighborhood",
+                table: "Areas",
+                columns: new[] { "City", "Neighborhood" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_inspections_ShelterId",
+                table: "inspections",
+                column: "ShelterId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_shelters_AreaId",
+                table: "shelters",
+                column: "AreaId");
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropTable(
+                name: "inspections");
+
+            migrationBuilder.DropTable(
+                name: "shelters");
+
+            migrationBuilder.DropTable(
+                name: "Areas");
+        }
+    }
+}
