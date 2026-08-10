@@ -9,6 +9,7 @@ namespace EmergencyShelterReadinessSystemAPI.Repsitories
         Task<IEnumerable<ShelterSortedDto>> GetShelterSorted(string sortBy, bool ascending = true);
         Task<IEnumerable<InspectionDetailedDto>> GetInspectionDetaeled();
         Task<IEnumerable<ShelterWithInspectionCountDto>> GetShelterWithInspectionCount();
+        Task<IEnumerable<FailedInspectionDto>> GetFailedInspection();
     }
 
 }

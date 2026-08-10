@@ -29,5 +29,8 @@ namespace EmergencyShelterReadinessSystemAPI.Controllers
         [HttpGet("with-inspection-count")]
         public async Task<ActionResult<IEnumerable<ShelterWithInspectionCountDto>>> GetShelterWithInspectionCount()
             => Ok(await _repository.GetShelterWithInspectionCount());
+        [HttpGet("inspections/failed")]
+        public async Task<ActionResult<IEnumerable<FailedInspectionDto>>> GetFailedInspection()
+            => Ok(await _repository.GetFailedInspection());
     }
 }

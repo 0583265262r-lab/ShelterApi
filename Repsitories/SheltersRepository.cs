@@ -106,5 +106,22 @@ namespace EmergencyShelterReadinessSystemAPI.Repsitories
                     InspectionCount = s.Inspections.Count()
                 }).ToListAsync();
         }
+        public async Task<IEnumerable<FailedInspectionDto>> GetFailedInspection()
+        {
+            var query = _context.Inspections
+                .Include(i => i.Shelter)
+                .ThenInclude(s => s.Area)
+                .AsQueryable();
+            query = query.Where(i => i.Passed == false);
+            return await query.Select(i => new FailedInspectionDto
+                                {
+                                    InspectionId = i.Id,
+                                    InspectionDate = i.InspectionDate,
+                                    ReadinessScore = i.ReadinessScore,
+                                    ShelterName = i.Shelter.Name,
+                                    City = i.Shelter.Area.City
+                                }).ToListAsync();
+        }
+        
     }
 }
