@@ -10,6 +10,8 @@ namespace EmergencyShelterReadinessSystemAPI.Repsitories
         Task<IEnumerable<InspectionDetailedDto>> GetInspectionDetaeled();
         Task<IEnumerable<ShelterWithInspectionCountDto>> GetShelterWithInspectionCount();
         Task<IEnumerable<FailedInspectionDto>> GetFailedInspection();
+        Task<IEnumerable<AreaStatisticsDto>> GetAreaStatistics();
+        Task<PagedResultDto<ShelterSortedDto>> GetPagedResult(int page, int pageSize = 10);
     }
 
 }

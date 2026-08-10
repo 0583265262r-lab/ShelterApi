@@ -122,6 +122,50 @@ namespace EmergencyShelterReadinessSystemAPI.Repsitories
                                     City = i.Shelter.Area.City
                                 }).ToListAsync();
         }
-        
+        public async Task<IEnumerable<AreaStatisticsDto>> GetAreaStatistics()
+        {
+            var query = _context.Areas
+                .Include(a => a.Shelters)
+                .Select(a => new AreaStatisticsDto
+                {
+                    City = a.City,
+                    Neighborhood = a.Neighborhood,
+                    ShelterCount = a.Shelters.Count(),
+                    TotalCapacity = a.Shelters.Sum(s => s.Capacity)
+                }).ToListAsync();
+            return await query;
+        }
+        public async Task<PagedResultDto<ShelterSortedDto>> GetPagedResult(int page, int pageSize = 10)
+        {
+            int pageNum = (page - 1) * pageSize;
+            var query = _context.Shelters
+                .OrderBy(s => s.Name);     
+            var totalCount =await query.CountAsync();
+            var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+            var items = await query
+                        .Skip(pageNum)
+                        .Take(pageSize)
+                        .Select(s => new ShelterSortedDto
+                        {
+                            Id = s.Id,
+                            Name = s.Name,
+                            Capacity = s.Capacity
+                        })
+                        .ToListAsync();
+            return new PagedResultDto<ShelterSortedDto>
+                {
+                    Item = items,
+                    TotalCount = totalCount,
+                    Page = page,
+                    PageSize = pageSize,
+                    TotalPages = totalPages
+                };
+        }
+
     }
-}
+
+
+
+
+    }
+

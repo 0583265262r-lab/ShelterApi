@@ -32,5 +32,17 @@ namespace EmergencyShelterReadinessSystemAPI.Controllers
         [HttpGet("inspections/failed")]
         public async Task<ActionResult<IEnumerable<FailedInspectionDto>>> GetFailedInspection()
             => Ok(await _repository.GetFailedInspection());
+        [HttpGet("areas/statistics")]
+        public async Task<ActionResult<IEnumerable<AreaStatisticsDto>>> GetAreaStatistics()
+            => Ok(await _repository.GetAreaStatistics());
+        [HttpGet("paged")]
+        public async Task<ActionResult<PagedResultDto<ShelterSortedDto>>> GetPagedResult(int page, int pageSize = 10)
+        {
+            if (page < 1)
+                return BadRequest();
+            if (pageSize > 50 | pageSize < 5)
+                return BadRequest();
+            return Ok(await _repository.GetPagedResult(page, pageSize));
+        }
     }
 }
